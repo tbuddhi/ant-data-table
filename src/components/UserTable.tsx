@@ -31,6 +31,7 @@ const DataTable: React.FC = () => {
     const searchInput = useRef<InputRef>(null);
     const { data, setData, loading, fetchData, tableParams, setTableParams } = useRandomUsers()
 
+    // Handle filter search
     const handleSearch = (
         selectedKeys: string[],
         confirm: (param?: FilterConfirmProps) => void,
@@ -41,6 +42,7 @@ const DataTable: React.FC = () => {
         setSearchedColumn(dataIndex);
     };
 
+    // Handle filter reset
     const handleReset = (clearFilters: () => void) => {
         clearFilters();
         setSearchText('');
@@ -124,8 +126,7 @@ const DataTable: React.FC = () => {
             dataIndex: 'name',
             key: 'name',
             sorter: {
-                compare: (a, b) => a.name.first.localeCompare(b.name.first),
-                // multiple: 3,
+                compare: (a, b) => a.name.first.localeCompare(b.name.first)
             },
             render: (name) => `${name.first} ${name.last}`,
             fixed: 'left',
@@ -136,8 +137,7 @@ const DataTable: React.FC = () => {
             dataIndex: 'gender',
             key: 'gender',
             sorter: {
-                compare: (a, b) => a.gender.localeCompare(b.gender),
-                // multiple: 2,
+                compare: (a, b) => a.gender.localeCompare(b.gender)
             },
             fixed: 'left',
             width: '15%'
@@ -147,8 +147,7 @@ const DataTable: React.FC = () => {
             dataIndex: 'email',
             key: 'email',
             sorter: {
-                compare: (a, b) => a.email.localeCompare(b.email),
-                // multiple: 1,
+                compare: (a, b) => a.email.localeCompare(b.email)
             },
             ...getColumnSearchProps('email'),
             fixed: 'left',
@@ -172,7 +171,6 @@ const DataTable: React.FC = () => {
     const onTableChange: TableProps<DataType>['onChange'] = (pagination, sorter) => {
         setTableParams({
             pagination,
-            // filters,
             ...sorter,
         });
         if (pagination.pageSize !== tableParams.pagination?.pageSize) {
