@@ -13,18 +13,19 @@ const MainLayout: React.FC = () => {
 
   return (
     <>
-    <Space direction="vertical" size="large" style={{ display: 'flex' }}>
-      <Header className="header" >
-        <Row justify="center">
-          <Title style={typoStyle} type="secondary">User Table</Title>
-        </Row>
-      </Header>
+      <Space direction="vertical" size="large" style={{ display: 'flex' }}>
+        <Header className="header">
+          <Row justify="center">
+            <Title style={typoStyle} type="secondary">User Table</Title>
+          </Row>
+        </Header>
 
-      <Row justify="center">
-        <Col xs={22} sm={20} md={18} lg={16} >
-          <DataTable />
-        </Col>
-      </Row>
+        <Row justify="center">
+          <Col xs={22} sm={20} md={18}>
+            {/* Insert users data table  */}
+            <DataTable />
+          </Col>
+        </Row>
       </Space>
     </>
   );

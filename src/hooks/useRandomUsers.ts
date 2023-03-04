@@ -14,6 +14,9 @@ interface DataType {
         uuid: string;
     };
     phone: string;
+    picture: {
+        thumbnail: string;
+    }
 }
 
 interface TableParams {
@@ -29,6 +32,7 @@ const getUserParams = (params: TableParams) => ({
     ...params,
 });
 
+// using this hook to fetch random users from api
 const useRandomUsers = () => {
     const [data, setData] = useState<DataType[]>();
     const [loading, setLoading] = useState(false);

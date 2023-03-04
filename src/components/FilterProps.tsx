@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ColumnType } from "antd/es/table";
 import { Button, Input, Space } from "antd";
 import type { InputRef } from 'antd';
@@ -21,7 +21,7 @@ interface DataType {
 
 type DataIndex = keyof DataType;
 
-const useFilterProps = () => {
+const FilterProps = () => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
@@ -98,8 +98,8 @@ const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<DataType> => ({
         ),
 });
 
-return {getColumnSearchProps}
+return { getColumnSearchProps }
 
 }
 
-export default useFilterProps
+export default FilterProps

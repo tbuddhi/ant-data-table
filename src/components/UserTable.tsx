@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Input, Space, Table } from 'antd';
+import { Avatar, Button, Input, Space, Table } from 'antd';
 import type { InputRef } from 'antd';
-import type { ColumnsType, ColumnType, TableProps, TablePaginationConfig } from 'antd/es/table';
-import type { FilterValue, FilterConfirmProps } from 'antd/es/table/interface';
+import type { ColumnsType, ColumnType, TableProps } from 'antd/es/table';
+import type { FilterConfirmProps } from 'antd/es/table/interface';
 import { FilterFilled } from '@ant-design/icons';
-import qs from 'qs';
 import Highlighter from 'react-highlight-words';
 
-// import useRandomUsers from '../hooks/useRandomUsers';
+import useRandomUsers from '../hooks/useRandomUsers';
 
 interface DataType {
     name: {
@@ -20,37 +19,19 @@ interface DataType {
         uuid: string;
     };
     phone: string;
+    picture: {
+        thumbnail: string;
+    }
 }
 
 type DataIndex = keyof DataType;
-
-interface TableParams {
-    pagination?: TablePaginationConfig;
-    sortField?: string;
-    sortOrder?: string;
-    filters?: Record<string, FilterValue>;
-}
-
-const getUserParams = (params: TableParams) => ({
-    results: params.pagination?.pageSize,
-    page: params.pagination?.current,
-    ...params,
-});
 
 const DataTable: React.FC = () => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
-    const [data, setData] = useState<DataType[]>();
-    const [loading, setLoading] = useState(false);
-    const [tableParams, setTableParams] = useState<TableParams>({
-        pagination: {
-            current: 1,
-            pageSize: 8,
-        },
-    });
 
-    // const { data, setData, loading, fetchData, tableParams, setTableParams } = useRandomUser()
+    const { data, setData, loading, fetchData, tableParams, setTableParams } = useRandomUsers()
 
     const handleSearch = (
         selectedKeys: string[],
@@ -126,6 +107,21 @@ const DataTable: React.FC = () => {
 
     const columns: ColumnsType<DataType> = [
         {
+            title: '',
+            dataIndex: 'picture',
+            key: 'picture',
+            render: (_, {picture}) => (
+                <>
+                    <Avatar
+                        size={{ xs: 28, sm: 32, md: 40 }}
+                        src={picture.thumbnail}
+                    />
+                </>
+            ),
+            width: '5%',
+            fixed: 'left',
+        },
+        {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
@@ -135,7 +131,7 @@ const DataTable: React.FC = () => {
             },
             render: (name) => `${name.first} ${name.last}`,
             fixed: 'left',
-            width: '20%',
+            width: '15%',
         },
         {
             title: 'Gender',
@@ -146,7 +142,7 @@ const DataTable: React.FC = () => {
                 multiple: 2,
             },
             fixed: 'left',
-            width: '20%'
+            width: '10%'
         },
         {
             title: 'Email',
@@ -168,32 +164,16 @@ const DataTable: React.FC = () => {
         },
     ];
 
-    const fetchData = () => {
-        setLoading(true);
-        fetch(`https://randomuser.me/api?${qs.stringify(getUserParams(tableParams))}`)
-            .then((res) => res.json())
-            .then(({ results }) => {
-                setData(results);
-                setLoading(false);
-                setTableParams({
-                    ...tableParams,
-                    pagination: {
-                        ...tableParams.pagination,
-                        total: 100
-                    },
-                });
-            });
-    };
-
     useEffect(() => {
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(tableParams)]);
 
     const onTableChange: TableProps<DataType>['onChange'] = (pagination, sorter) => {
-        // console.log('params', pagination, filters, sorter, extra);
+        // console.log('params', pagination, filters, sorter);
         setTableParams({
             pagination,
+            // filters,
             ...sorter,
         });
         if (pagination.pageSize !== tableParams.pagination?.pageSize) {
