@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import type { ColumnsType, ColumnType, TableProps, TablePaginationConfig } from 'antd/es/table';
-import type { FilterValue, FilterConfirmProps } from 'antd/es/table/interface';
+import { useState } from 'react'
+import type { TablePaginationConfig } from 'antd/es/table';
+import type { FilterValue } from 'antd/es/table/interface';
 import qs from 'qs';
 
 interface DataType {
@@ -29,7 +29,7 @@ const getUserParams = (params: TableParams) => ({
     ...params,
 });
 
-const useRandomUser = () => {
+const useRandomUsers = () => {
     const [data, setData] = useState<DataType[]>();
     const [loading, setLoading] = useState(false);
     const [tableParams, setTableParams] = useState<TableParams>({
@@ -40,26 +40,24 @@ const useRandomUser = () => {
     });
 
     const fetchData = () => {
-    setLoading(true);
-    fetch(`https://randomuser.me/api?${qs.stringify(getUserParams(tableParams))}`)
-        .then((res) => res.json())
-        .then(({ results }) => {
-            setData(results);
-            setLoading(false);
-            setTableParams({
-                ...tableParams,
-                pagination: {
-                    ...tableParams.pagination,
-                    total: 100
-                },
+        setLoading(true);
+        fetch(`https://randomuser.me/api?${qs.stringify(getUserParams(tableParams))}`)
+            .then((res) => res.json())
+            .then(({ results }) => {
+                setData(results);
+                setLoading(false);
+                setTableParams({
+                    ...tableParams,
+                    pagination: {
+                        ...tableParams.pagination,
+                        total: 100
+                    },
+                });
             });
-        });
+    };
 
-        // return fetchData;
-};
-
-  return {data, setData, loading, tableParams, setTableParams, fetchData}
+    return { data, setData, loading, tableParams, setTableParams, fetchData }
 }
 
-export default useRandomUser
+export default useRandomUsers
 

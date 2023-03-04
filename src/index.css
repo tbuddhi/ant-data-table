@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #e7e7e7;
+  background: #f2f2f2;
 }
 
 code {
@@ -15,4 +15,8 @@ code {
 
 .ant-table-container{
   overflow-y: auto;
+}
+
+.ant-layout-header{
+  background: #00469d;
 }

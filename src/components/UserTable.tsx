@@ -7,7 +7,7 @@ import { FilterFilled } from '@ant-design/icons';
 import qs from 'qs';
 import Highlighter from 'react-highlight-words';
 
-import useRandomUser from '../hooks/useRandomUser';
+// import useRandomUsers from '../hooks/useRandomUsers';
 
 interface DataType {
     name: {
@@ -24,33 +24,33 @@ interface DataType {
 
 type DataIndex = keyof DataType;
 
-// interface TableParams {
-//     pagination?: TablePaginationConfig;
-//     sortField?: string;
-//     sortOrder?: string;
-//     filters?: Record<string, FilterValue>;
-// }
+interface TableParams {
+    pagination?: TablePaginationConfig;
+    sortField?: string;
+    sortOrder?: string;
+    filters?: Record<string, FilterValue>;
+}
 
-// const getUserParams = (params: TableParams) => ({
-//     results: params.pagination?.pageSize,
-//     page: params.pagination?.current,
-//     ...params,
-// });
+const getUserParams = (params: TableParams) => ({
+    results: params.pagination?.pageSize,
+    page: params.pagination?.current,
+    ...params,
+});
 
 const DataTable: React.FC = () => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
-    // const [data, setData] = useState<DataType[]>();
-    // const [loading, setLoading] = useState(false);
-    // const [tableParams, setTableParams] = useState<TableParams>({
-    //     pagination: {
-    //         current: 1,
-    //         pageSize: 8,
-    //     },
-    // });
+    const [data, setData] = useState<DataType[]>();
+    const [loading, setLoading] = useState(false);
+    const [tableParams, setTableParams] = useState<TableParams>({
+        pagination: {
+            current: 1,
+            pageSize: 8,
+        },
+    });
 
-    const { data, setData, loading, fetchData, tableParams, setTableParams } = useRandomUser()
+    // const { data, setData, loading, fetchData, tableParams, setTableParams } = useRandomUser()
 
     const handleSearch = (
         selectedKeys: string[],
@@ -168,25 +168,26 @@ const DataTable: React.FC = () => {
         },
     ];
 
-    // const fetchData = () => {
-    //     setLoading(true);
-    //     fetch(`https://randomuser.me/api?${qs.stringify(getUserParams(tableParams))}`)
-    //         .then((res) => res.json())
-    //         .then(({ results }) => {
-    //             setData(results);
-    //             setLoading(false);
-    //             setTableParams({
-    //                 ...tableParams,
-    //                 pagination: {
-    //                     ...tableParams.pagination,
-    //                     total: 100
-    //                 },
-    //             });
-    //         });
-    // };
+    const fetchData = () => {
+        setLoading(true);
+        fetch(`https://randomuser.me/api?${qs.stringify(getUserParams(tableParams))}`)
+            .then((res) => res.json())
+            .then(({ results }) => {
+                setData(results);
+                setLoading(false);
+                setTableParams({
+                    ...tableParams,
+                    pagination: {
+                        ...tableParams.pagination,
+                        total: 100
+                    },
+                });
+            });
+    };
 
     useEffect(() => {
         fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(tableParams)]);
 
     const onTableChange: TableProps<DataType>['onChange'] = (pagination, sorter) => {

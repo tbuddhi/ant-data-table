@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { ColumnType } from "antd/es/table";
 import { Button, Input, Space } from "antd";
 import type { InputRef } from 'antd';
-import type { FilterValue, FilterConfirmProps } from 'antd/es/table/interface';
+import type { FilterConfirmProps } from 'antd/es/table/interface';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 
