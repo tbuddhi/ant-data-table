@@ -9,11 +9,12 @@ const typoStyle = {
   margin: '8px 0',
 };
 
+// All components are loading into MainLayout
 const MainLayout: React.FC = () => {
 
   return (
     <>
-      <Space direction="vertical" size="large" style={{ display: 'flex' }}>
+      <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
         <Header className="header">
           <Row justify="center">
             <Title style={typoStyle} type="secondary">User Table</Title>

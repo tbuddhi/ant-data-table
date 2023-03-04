@@ -7,7 +7,6 @@ import { FilterFilled } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 
 import useRandomUsers from '../hooks/useRandomUsers';
-
 interface DataType {
     name: {
         first: string;
@@ -30,7 +29,6 @@ const DataTable: React.FC = () => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
-
     const { data, setData, loading, fetchData, tableParams, setTableParams } = useRandomUsers()
 
     const handleSearch = (
@@ -48,6 +46,7 @@ const DataTable: React.FC = () => {
         setSearchText('');
     };
 
+    // Implement filter props for all columns
     const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<DataType> => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
             <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
@@ -105,18 +104,17 @@ const DataTable: React.FC = () => {
             ),
     });
 
+    // Initialize table columns
     const columns: ColumnsType<DataType> = [
         {
             title: '',
             dataIndex: 'picture',
             key: 'picture',
-            render: (_, {picture}) => (
-                <>
-                    <Avatar
-                        size={{ xs: 28, sm: 32, md: 40 }}
-                        src={picture.thumbnail}
-                    />
-                </>
+            render: (_, { picture }) => (
+                <Avatar
+                    size={{ xs: 28, sm: 32, md: 40 }}
+                    src={picture.thumbnail}
+                />
             ),
             width: '5%',
             fixed: 'left',
@@ -127,11 +125,11 @@ const DataTable: React.FC = () => {
             key: 'name',
             sorter: {
                 compare: (a, b) => a.name.first.localeCompare(b.name.first),
-                multiple: 3,
+                // multiple: 3,
             },
             render: (name) => `${name.first} ${name.last}`,
             fixed: 'left',
-            width: '15%',
+            width: '20%',
         },
         {
             title: 'Gender',
@@ -139,10 +137,10 @@ const DataTable: React.FC = () => {
             key: 'gender',
             sorter: {
                 compare: (a, b) => a.gender.localeCompare(b.gender),
-                multiple: 2,
+                // multiple: 2,
             },
             fixed: 'left',
-            width: '10%'
+            width: '15%'
         },
         {
             title: 'Email',
@@ -150,7 +148,7 @@ const DataTable: React.FC = () => {
             key: 'email',
             sorter: {
                 compare: (a, b) => a.email.localeCompare(b.email),
-                multiple: 1,
+                // multiple: 1,
             },
             ...getColumnSearchProps('email'),
             fixed: 'left',
@@ -164,13 +162,14 @@ const DataTable: React.FC = () => {
         },
     ];
 
+    // Handle data fetching when table is changed
     useEffect(() => {
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(tableParams)]);
 
+    // Handle pagination and table events when onChange
     const onTableChange: TableProps<DataType>['onChange'] = (pagination, sorter) => {
-        // console.log('params', pagination, filters, sorter);
         setTableParams({
             pagination,
             // filters,
@@ -181,6 +180,7 @@ const DataTable: React.FC = () => {
         }
     };
 
+    // Handle user table UI
     return (
         <Table
             columns={columns}

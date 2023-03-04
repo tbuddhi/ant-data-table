@@ -3,6 +3,8 @@ import type { TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue } from 'antd/es/table/interface';
 import qs from 'qs';
 
+// const apiURL: string = process.env.API_URL + '/api'
+const { REACT_APP_API_URL } = process.env;
 interface DataType {
     name: {
         first: string;
@@ -18,7 +20,6 @@ interface DataType {
         thumbnail: string;
     }
 }
-
 interface TableParams {
     pagination?: TablePaginationConfig;
     sortField?: string;
@@ -32,7 +33,7 @@ const getUserParams = (params: TableParams) => ({
     ...params,
 });
 
-// using this hook to fetch random users from api
+// using this hook to fetch random users from API
 const useRandomUsers = () => {
     const [data, setData] = useState<DataType[]>();
     const [loading, setLoading] = useState(false);
@@ -45,7 +46,7 @@ const useRandomUsers = () => {
 
     const fetchData = () => {
         setLoading(true);
-        fetch(`https://randomuser.me/api?${qs.stringify(getUserParams(tableParams))}`)
+        fetch(`${REACT_APP_API_URL}?${qs.stringify(getUserParams(tableParams))}`)
             .then((res) => res.json())
             .then(({ results }) => {
                 setData(results);
